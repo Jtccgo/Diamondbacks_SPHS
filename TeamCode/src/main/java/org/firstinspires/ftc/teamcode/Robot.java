@@ -40,6 +40,7 @@ public class Robot {
     private double ticksPerRotation;
     private IMU imu;
     LinearOpMode opMode;
+    boolean lastTriangle;
     public void init(HardwareMap hwMap, /*Optional<LinearOpMode> opMode*/LinearOpMode opMode) {
         flm = hwMap.get(DcMotorEx.class, "fl");
         flm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -54,11 +55,11 @@ public class Robot {
         brm = hwMap.get(DcMotorEx.class, "br");
         brm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        leftFW = hwMap.get(DcMotorEx.class, "lFW");
-        leftFW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        leftFW = hwMap.get(DcMotorEx.class, "lFW");
+//        leftFW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        rightFW = hwMap.get(DcMotorEx.class, "rFW");
-        rightFW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        rightFW = hwMap.get(DcMotorEx.class, "rFW");
+//        rightFW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 //        flm.setDirection(DcMotor.Direction.REVERSE);
 //        blm.setDirection(DcMotor.Direction.REVERSE);
@@ -69,12 +70,12 @@ public class Robot {
         blm.setDirection(DcMotorEx.Direction.FORWARD);
         frm.setDirection(DcMotorEx.Direction.REVERSE);//Motors flipped; have to keep consistent
         brm.setDirection(DcMotorEx.Direction.REVERSE);
-        leftFW.setDirection(DcMotorEx.Direction.REVERSE);
-        rightFW.setDirection(DcMotorEx.Direction.FORWARD);
+//        leftFW.setDirection(DcMotorEx.Direction.REVERSE);
+//        rightFW.setDirection(DcMotorEx.Direction.FORWARD);
         ticksPerRotation = flm.getMotorType().getTicksPerRev();
 
         imu = hwMap.get(IMU.class, "imu");
-        RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
+        RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP);
         imu.initialize(new IMU.Parameters(RevOrientation));
 
     }
@@ -91,30 +92,31 @@ public class Robot {
         double x = Math.abs(opMode.gamepad1.left_stick_x) > 0.05 ? opMode.gamepad1.left_stick_x:0;//Makes it easier to drive straight
         double rx = opMode.gamepad1.right_stick_x;
         if(fieldCentric) {// in reference to the field
-            if(opMode.gamepad1.aWasReleased()) {//a is x
+            if(opMode.gamepad1.triangle && lastTriangle) {//a is x
                 imu.resetYaw();
-                botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+                botHeading = imu.getRobotYawPitchRollAngles().getYaw();
             }
+            lastTriangle = opMode.gamepad1.triangle;
             double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
             double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
-            frontLeftPower = rotY + rotX + rx;
+            frontLeftPower = rotY + rotX - rx;
             //double frontRightPower = rotY - rotX - rx;
-            frontRightPower = rotY - rotX - rx;
+            frontRightPower = rotY - rotX + rx;
             // double backLeftPower = rotY - rotX + rx;
-            backLeftPower = rotY - rotX + rx;
-            backRightPower = rotY + rotX - rx;
+            backLeftPower = rotY - rotX - rx;
+            backRightPower = rotY + rotX + rx;
 
             //max =  Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1); works but over-normalizes
         } else {
             double axial = y;
             double lateral = x;
             double yaw = rx;
-            frontLeftPower = axial + lateral + yaw;
+            frontLeftPower = axial + lateral - yaw;
 //            double frontRightPower = axial - lateral - yaw;
-            frontRightPower = axial - lateral - yaw;
+            frontRightPower = axial - lateral + yaw;
 //            double backLeftPower = axial - lateral - yaw;
-            backLeftPower = axial - lateral + yaw;
-            backRightPower = axial + lateral - yaw;
+            backLeftPower = axial - lateral - yaw;
+            backRightPower = axial + lateral + yaw;
         }
         max = Math.max(1.0, Math.abs(frontLeftPower));
         max = Math.max(max, Math.abs(frontRightPower));
@@ -217,10 +219,10 @@ public class Robot {
         blm.setPower(blp);
         brm.setPower(brp);
     }
-    public void controlFlywheels(double powerLFW, double powerRFW) {
-        leftFW.setPower(powerLFW);
-        rightFW.setPower(powerRFW);
-    }
+//    public void controlFlywheels(double powerLFW, double powerRFW) {
+//        leftFW.setPower(powerLFW);
+//        rightFW.setPower(powerRFW);
+//    }
     public double getTicksPerRotation() {
         return ticksPerRotation;
     }
