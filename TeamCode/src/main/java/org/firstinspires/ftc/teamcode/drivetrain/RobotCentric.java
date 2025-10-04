@@ -11,8 +11,8 @@ public class RobotCentric extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     DcMotorEx flm;
     DcMotorEx frm;
-    DcMotorEx blm;
-    DcMotorEx brm;
+//    DcMotorEx blm;
+//    DcMotorEx brm;
     double lastTime = 0;
     boolean lBumper = false;
     int bumperPressCount = 0;
@@ -24,8 +24,8 @@ public class RobotCentric extends LinearOpMode {
         robot.init(hardwareMap, this);
         flm = hardwareMap.get(DcMotorEx.class, "fl");
         frm = hardwareMap.get(DcMotorEx.class, "fr");
-        blm = hardwareMap.get(DcMotorEx.class, "bl");
-        brm = hardwareMap.get(DcMotorEx.class, "br");
+//        blm = hardwareMap.get(DcMotorEx.class, "bl");
+//        brm = hardwareMap.get(DcMotorEx.class, "br");
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();

@@ -20,10 +20,10 @@ import java.util.Optional;
 public class Robot {
     private DcMotorEx flm;
     private DcMotorEx frm;
-    private DcMotorEx blm;
-    private DcMotorEx brm;
-    DcMotorEx leftFW;
-    DcMotorEx rightFW;
+//    private DcMotorEx blm;
+//    private DcMotorEx brm;
+//    DcMotorEx leftFW;
+//    DcMotorEx rightFW;
     private ElapsedTime runtime = new ElapsedTime();
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
@@ -31,13 +31,13 @@ public class Robot {
     // For example, use a value of 2.0 for a 12-tooth spur gear driving a 24-tooth spur gear.
     // This is gearing DOWN for less speed and more torque.
     // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
-    static final double     COUNTS_PER_MOTOR_REV    = 537.7 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
-    static final double     WHEEL_DIAMETER_INCHES   = 3.77953 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * 3.1415);
+//    static final double     COUNTS_PER_MOTOR_REV    = 537.7 ;    // eg: TETRIX Motor Encoder
+//    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
+//    static final double     WHEEL_DIAMETER_INCHES   = 3.77953 ;     // For figuring circumference
+//    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+//            (WHEEL_DIAMETER_INCHES * 3.1415);
 
-    private double ticksPerRotation;
+//    private double ticksPerRotation;
     private IMU imu;
     LinearOpMode opMode;
     boolean lastTriangle;
@@ -49,11 +49,11 @@ public class Robot {
         frm = hwMap.get(DcMotorEx.class, "fr");
         frm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        blm = hwMap.get(DcMotorEx.class, "bl");
-        blm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-
-        brm = hwMap.get(DcMotorEx.class, "br");
-        brm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//        blm = hwMap.get(DcMotorEx.class, "bl");
+//        blm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//
+//        brm = hwMap.get(DcMotorEx.class, "br");
+//        brm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
 //        leftFW = hwMap.get(DcMotorEx.class, "lFW");
 //        leftFW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -66,16 +66,16 @@ public class Robot {
 //        frm.setDirection(DcMotor.Direction.FORWARD);
 //        brm.setDirection(DcMotor.Direction.REVERSE);
         //new| have to turn bot around
-        flm.setDirection(DcMotorEx.Direction.REVERSE);//Motor flipped for some reason
-        blm.setDirection(DcMotorEx.Direction.FORWARD);
+        flm.setDirection(DcMotorEx.Direction.FORWARD);//Motor flipped for some reason
+//        blm.setDirection(DcMotorEx.Direction.FORWARD);
         frm.setDirection(DcMotorEx.Direction.REVERSE);//Motors flipped; have to keep consistent
-        brm.setDirection(DcMotorEx.Direction.REVERSE);
+//        brm.setDirection(DcMotorEx.Direction.REVERSE);
 //        leftFW.setDirection(DcMotorEx.Direction.REVERSE);
 //        rightFW.setDirection(DcMotorEx.Direction.FORWARD);
-        ticksPerRotation = flm.getMotorType().getTicksPerRev();
+//        ticksPerRotation = flm.getMotorType().getTicksPerRev();
 
         imu = hwMap.get(IMU.class, "imu");
-        RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP);
+        RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.UP);
         imu.initialize(new IMU.Parameters(RevOrientation));
 
     }
@@ -83,8 +83,8 @@ public class Robot {
         double max;
         double frontLeftPower;
         double frontRightPower;
-        double backLeftPower;
-        double backRightPower;
+//        double backLeftPower;
+//        double backRightPower;
         double speedMultiplier;
         if(opMode.opModeIsActive()) {
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
@@ -103,8 +103,8 @@ public class Robot {
             //double frontRightPower = rotY - rotX - rx;
             frontRightPower = rotY - rotX + rx;
             // double backLeftPower = rotY - rotX + rx;
-            backLeftPower = rotY - rotX - rx;
-            backRightPower = rotY + rotX + rx;
+//            backLeftPower = rotY - rotX - rx;
+//            backRightPower = rotY + rotX + rx;
 
             //max =  Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1); works but over-normalizes
         } else {
@@ -115,24 +115,24 @@ public class Robot {
 //            double frontRightPower = axial - lateral - yaw;
             frontRightPower = axial - lateral + yaw;
 //            double backLeftPower = axial - lateral - yaw;
-            backLeftPower = axial - lateral - yaw;
-            backRightPower = axial + lateral + yaw;
+//            backLeftPower = axial - lateral - yaw;
+//            backRightPower = axial + lateral + yaw;
         }
         max = Math.max(1.0, Math.abs(frontLeftPower));
         max = Math.max(max, Math.abs(frontRightPower));
-        max = Math.max(max, Math.abs(backLeftPower));
-        max = Math.max(max, Math.abs(backRightPower));
+//        max = Math.max(max, Math.abs(backLeftPower));
+//        max = Math.max(max, Math.abs(backRightPower));
         speedMultiplier = 1.0 - (opMode.gamepad1.right_trigger * 0.7);
         if(max > 1.0) {
             frontLeftPower /= max;
             frontRightPower /= max;
-            backLeftPower /= max;
-            backRightPower /= max;
+//            backLeftPower /= max;
+//            backRightPower /= max;
         }
         frontLeftPower *= speedMultiplier;
         frontRightPower *= speedMultiplier;
-        backLeftPower *= speedMultiplier;
-        backRightPower *= speedMultiplier;
+//        backLeftPower *= speedMultiplier;
+//        backRightPower *= speedMultiplier;
         // Uncomment the following code to test your motor directions.
         // Each button should make the corresponding motor run FORWARD.
         //   1) First get all the motors to take to correct positions on the robot
@@ -145,96 +145,96 @@ public class Robot {
 //            frontRightPower = opMode.gamepad1.y ? 1.0 : 0.0;  // Y gamepad wrong it's front left
 //            backRightPower  = opMode.gamepad1.b ? 1.0 : 0.0;  // B gamepad correct its back right
 
-        setMotorSpeed(frontLeftPower, frontRightPower, backLeftPower, backRightPower);
+        setMotorSpeed(frontLeftPower, frontRightPower);
         opMode.telemetry.addData("Bot Heading:", botHeading);
         opMode.telemetry.addData("Gamepad(Left V, Left H, Right H):",y + " " + x + " " + rx);
         opMode.telemetry.addData("Status", "Run Time: " + runtime.toString());
         opMode.telemetry.addData("Speed Multiplier: ", speedMultiplier);
         opMode.telemetry.addData("Front left/Right", "%4.2f, %4.2f", frontLeftPower, frontRightPower);
-        opMode.telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
+        //opMode.telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
 
         }
     }
-    public void encoderDrive(double speed, double frontLeftInches, double frontRightInches, double backLeftInches, double backRightInches, double timeout) {
-        //if motors acting wonky refer to their direction
-        encoderReset();
-        int newFrontLeftTarget;
-        int newFrontRightTarget;
-        int newBackLeftTarget;
-        int newBackRightTarget;
-
-        if(opMode.opModeIsActive()) {
-            //Determines the target position
-            newFrontLeftTarget = flm.getCurrentPosition() + (int)(frontLeftInches * COUNTS_PER_INCH);
-            newFrontRightTarget = frm.getCurrentPosition() + (int)(frontRightInches * COUNTS_PER_INCH);
-            newBackLeftTarget = blm.getCurrentPosition() + (int)(backLeftInches * COUNTS_PER_INCH);
-            newBackRightTarget = brm.getCurrentPosition() + (int)(backRightInches * COUNTS_PER_INCH);
-
-            flm.setTargetPosition(newFrontLeftTarget);
-            frm.setTargetPosition(newFrontRightTarget);
-            blm.setTargetPosition(newBackLeftTarget);
-            brm.setTargetPosition(newBackRightTarget);
-            //runs to target
-            flm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            frm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            blm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            brm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-
-            runtime.reset();//resets time and provides power
-            flm.setPower(Math.abs(speed));
-            frm.setPower(Math.abs(speed));
-            blm.setPower(Math.abs(speed));
-            brm.setPower(Math.abs(speed));
-
-            // keep looping while we are still active, and there is time left, and both motors are running.
-            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-            // its target position, the motion will stop.  This is "safer" in the event that the robot will
-            // always end the motion as soon as possible.
-            // However, if you require that BOTH motors have finished their moves before the robot continues
-            // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            while(opMode.opModeIsActive() && (runtime.seconds() < timeout) && (flm.isBusy() || frm.isBusy() || blm.isBusy() || brm.isBusy())) {
-                //Display to driver
-                opMode.telemetry.addData("Running to", "frontLeft: %7d frontRight: %7d \nbackLeft: %7d backRight: %7d", newFrontLeftTarget, newFrontRightTarget, newBackLeftTarget, newBackRightTarget);
-                opMode.telemetry.addData("Currently at ", "frontLeft: %7d frontRight: %7d \nbackLeft: %7d backRight: %7d", flm.getCurrentPosition(), frm.getCurrentPosition(), blm.getCurrentPosition(), brm.getCurrentPosition());
-                opMode.telemetry.update();
-            }
-            flm.setPower(0);
-            frm.setPower(0);
-            blm.setPower(0);
-            brm.setPower(0);
-            flm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-            frm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-            blm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-            brm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-            opMode.sleep(250);
-        }
-    }
+//    public void encoderDrive(double speed, double frontLeftInches, double frontRightInches, double backLeftInches, double backRightInches, double timeout) {
+//        //if motors acting wonky refer to their direction
+//        encoderReset();
+//        int newFrontLeftTarget;
+//        int newFrontRightTarget;
+//        int newBackLeftTarget;
+//        int newBackRightTarget;
+//
+//        if(opMode.opModeIsActive()) {
+//            //Determines the target position
+//            newFrontLeftTarget = flm.getCurrentPosition() + (int)(frontLeftInches * COUNTS_PER_INCH);
+//            newFrontRightTarget = frm.getCurrentPosition() + (int)(frontRightInches * COUNTS_PER_INCH);
+//            newBackLeftTarget = blm.getCurrentPosition() + (int)(backLeftInches * COUNTS_PER_INCH);
+//            newBackRightTarget = brm.getCurrentPosition() + (int)(backRightInches * COUNTS_PER_INCH);
+//
+//            flm.setTargetPosition(newFrontLeftTarget);
+//            frm.setTargetPosition(newFrontRightTarget);
+//            blm.setTargetPosition(newBackLeftTarget);
+//            brm.setTargetPosition(newBackRightTarget);
+//            //runs to target
+//            flm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+//            frm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+//            blm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+//            brm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+//
+//            runtime.reset();//resets time and provides power
+//            flm.setPower(Math.abs(speed));
+//            frm.setPower(Math.abs(speed));
+//            blm.setPower(Math.abs(speed));
+//            brm.setPower(Math.abs(speed));
+//
+//            // keep looping while we are still active, and there is time left, and both motors are running.
+//            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+//            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+//            // always end the motion as soon as possible.
+//            // However, if you require that BOTH motors have finished their moves before the robot continues
+//            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+//            while(opMode.opModeIsActive() && (runtime.seconds() < timeout) && (flm.isBusy() || frm.isBusy() || blm.isBusy() || brm.isBusy())) {
+//                //Display to driver
+//                opMode.telemetry.addData("Running to", "frontLeft: %7d frontRight: %7d \nbackLeft: %7d backRight: %7d", newFrontLeftTarget, newFrontRightTarget, newBackLeftTarget, newBackRightTarget);
+//                opMode.telemetry.addData("Currently at ", "frontLeft: %7d frontRight: %7d \nbackLeft: %7d backRight: %7d", flm.getCurrentPosition(), frm.getCurrentPosition(), blm.getCurrentPosition(), brm.getCurrentPosition());
+//                opMode.telemetry.update();
+//            }
+//            flm.setPower(0);
+//            frm.setPower(0);
+//            blm.setPower(0);
+//            brm.setPower(0);
+//            flm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//            frm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//            blm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//            brm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//            opMode.sleep(250);
+//        }
+//    }
 
     public IMU getImu() {
         return imu;
     }
-    public void setMotorSpeed(double flp, double frp, double blp, double brp) {
+    public void setMotorSpeed(double flp, double frp) {
         flm.setPower(flp);
         frm.setPower(frp);
-        blm.setPower(blp);
-        brm.setPower(brp);
+//        blm.setPower(blp);
+//        brm.setPower(brp);
     }
 //    public void controlFlywheels(double powerLFW, double powerRFW) {
 //        leftFW.setPower(powerLFW);
 //        rightFW.setPower(powerRFW);
 //    }
-    public double getTicksPerRotation() {
-        return ticksPerRotation;
-    }
+//    public double getTicksPerRotation() {
+//        return ticksPerRotation;
+//    }
 
-    public double[] getMotorRotations() {
-        return new double[] {
-                flm.getCurrentPosition()/ticksPerRotation,
-                frm.getCurrentPosition()/ticksPerRotation,
-                blm.getCurrentPosition()/ticksPerRotation,
-                brm.getCurrentPosition()/ticksPerRotation
-        };
-    }
+//    public double[] getMotorRotations() {
+//        return new double[] {
+//                flm.getCurrentPosition()/ticksPerRotation,
+//                frm.getCurrentPosition()/ticksPerRotation,
+//                blm.getCurrentPosition()/ticksPerRotation,
+//                brm.getCurrentPosition()/ticksPerRotation
+//        };
+//    }
     public double getHeading(AngleUnit angleUnit) {
         return imu.getRobotYawPitchRollAngles().getYaw();
     }
@@ -242,20 +242,20 @@ public class Robot {
         ArrayList<TestItem> tests = new ArrayList<>();
         tests.add(new TestMotor("Front Left Motor", 0.5, flm));
         tests.add(new TestMotor("Front Right Motor", 0.5, frm));
-        tests.add(new TestMotor("Back Left Motor", 0.5, blm));
-        tests.add(new TestMotor("Back Right Motor", 0.5, brm));
+//        tests.add(new TestMotor("Back Left Motor", 0.5, blm));
+//        tests.add(new TestMotor("Back Right Motor", 0.5, brm));
         return tests;
     }
 
-    public void encoderReset() {
-        flm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        frm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        blm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        brm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-
-        flm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        frm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        blm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        brm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-    }
+//    public void encoderReset() {
+//        flm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//        frm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//        blm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//        brm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        flm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//        frm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//        blm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//        brm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//    }
 }

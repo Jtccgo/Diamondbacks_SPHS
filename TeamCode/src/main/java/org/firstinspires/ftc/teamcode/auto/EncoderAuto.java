@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -8,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Robot;
 
-
+@Disabled
 @Autonomous(name = "Encoder", group = "OpModes")
 public class EncoderAuto extends LinearOpMode {
     public enum Seq{
@@ -50,10 +51,10 @@ public class EncoderAuto extends LinearOpMode {
         waitForStart();
         runtime.reset();
         //Autonomous Path Here
-        robot.encoderDrive(DRIVE_SPEED, 12, 12, 12, 12, 20.0);//forward
-        robot.encoderDrive(TURN_SPEED, 12, 0, 0, -12, 20.0);//turn right
-        robot.encoderDrive(DRIVE_SPEED, 24, 24, 24, 24, 20.0);//forward
-        robot.encoderDrive(DRIVE_SPEED, 0, 12, -12, 0, 20.0);//turn lefts
+//        robot.encoderDrive(DRIVE_SPEED, 12, 12, 12, 12, 20.0);//forward
+//        robot.encoderDrive(TURN_SPEED, 12, 0, 0, -12, 20.0);//turn right
+//        robot.encoderDrive(DRIVE_SPEED, 24, 24, 24, 24, 20.0);//forward
+//        robot.encoderDrive(DRIVE_SPEED, 0, 12, -12, 0, 20.0);//turn lefts
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);  // pause to display final telemetry message.

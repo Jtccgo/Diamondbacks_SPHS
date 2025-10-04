@@ -16,8 +16,8 @@ public class FieldCentric extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     DcMotorEx flm;
     DcMotorEx frm;
-    DcMotorEx blm;
-    DcMotorEx brm;
+//    DcMotorEx blm;
+//    DcMotorEx brm;
     IMU imu;
 
     public void runOpMode() {
@@ -26,8 +26,8 @@ public class FieldCentric extends LinearOpMode {
         imu = robot.getImu();
         flm = hardwareMap.get(DcMotorEx.class, "fl");
         frm = hardwareMap.get(DcMotorEx.class, "fr");
-        blm = hardwareMap.get(DcMotorEx.class, "bl");
-        brm = hardwareMap.get(DcMotorEx.class, "br");
+//        blm = hardwareMap.get(DcMotorEx.class, "bl");
+//        brm = hardwareMap.get(DcMotorEx.class, "br");
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
