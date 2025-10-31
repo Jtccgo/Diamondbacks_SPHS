@@ -37,7 +37,7 @@ public class AprilTagAuto extends LinearOpMode {
         telemetry.speak("six and seven");
         Robot robot = new Robot();
         robot.init(hardwareMap, this);
-        boolean navigation;
+        boolean navigation = false;
         while (opModeIsActive()) {
             flm = hardwareMap.get(DcMotorEx.class, "fl");
             frm = hardwareMap.get(DcMotorEx.class, "fr");
@@ -90,9 +90,12 @@ public class AprilTagAuto extends LinearOpMode {
                 if(side == Tag.RED || side == Tag.BLUE) {
                     navigation = true;
                 }
-                if(tag == null && side == null && currentDetections.isEmpty()) {
+                if(tag == null && side == null && currentDetections.isEmpty() && !navigation) {
                     //code to find tag and reposition according to the next pose
+                    //turns around slowly
+                    robot.setMotorSpeed(0.3, -0.3, 0.3,-0.3 );
                 }
+
                 currentDetections.clear();
             }
         }
